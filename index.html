@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="초보자를 위한 스페인어 첫걸음 학습 어플 ¡Hola! 매일 5분씩 게임처럼 재미있게 스페인어 알파벳, 단어, 회화, 퀴즈를 마스터하세요.">
+  <meta name="keywords" content="스페인어, 스페인어 초급, 스페인어 독학, 스페인어 회화, 스페인어 단어, 스페인어 퀴즈">
+  <meta name="author" content="Antigravity Spain Team">
+  <meta property="og:title" content="¡Hola! - 쉽고 재미있는 스페인어 첫걸음">
+  <meta property="og:description" content="매일 5분씩 게임처럼 즐기는 스페인어 학습 서비스. 스트릭을 쌓고 문화 카드를 수집하세요!">
+  <meta property="og:type" content="website">
+  
+  <title>¡Hola! - 스페인어 첫걸음</title>
+  
+  <!-- Fonts: Outfit (English/Spanish) & Noto Sans KR (Korean) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Material Symbols Rounded for premium iconography -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+  
+  <!-- Premium Custom CSS Style -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Canvas Confetti for Celebration Effects -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-logo">
+        <span class="logo-emoji">🇪🇸</span>
+        <h1>¡Hola! <span class="logo-accent">Español</span></h1>
+      </div>
+      <div class="header-status">
+        <!-- Daily Streak Counter -->
+        <div class="streak-badge" id="streak-badge-container" title="연속 학습일수">
+          <span class="material-symbols-rounded icon-fire">local_fire_department</span>
+          <span class="streak-count" id="streak-count-val">0</span>일 연속
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="app-content">
+      
+      <!-- 1. DASHBOARD VIEW (HOME) -->
+      <section id="home-view" class="view-section active">
+        <div class="welcome-card">
+          <div class="welcome-text">
+            <h2>¡Hola! 안녕하세요! 👋</h2>
+            <p>오늘도 스페인어 바다로 함께 떠나볼까요? 하루 5분이면 충분합니다.</p>
+          </div>
+          <div class="progress-ring-container">
+            <!-- Circular Progress Tracker -->
+            <div class="progress-box">
+              <span class="progress-percentage" id="overall-progress-val">0%</span>
+              <span class="progress-label">전체 달성도</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Progress Stats -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="material-symbols-rounded stat-icon color-orange">menu_book</span>
+            <div class="stat-info">
+              <span class="stat-num" id="stat-vocab-count">0/100</span>
+              <span class="stat-label">학습한 단어</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <span class="material-symbols-rounded stat-icon color-red">quiz</span>
+            <div class="stat-info">
+              <span class="stat-num" id="stat-quiz-score">0/20</span>
+              <span class="stat-label">퀴즈 최고 점수</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Culture Card Collection Section -->
+        <div class="section-title">
+          <h3>🏆 나의 스페인 문화 카드 컬렉션</h3>
+          <span class="section-subtitle">학습과 퀴즈를 완료하고 스페인 역사/지식 카드를 모아보세요!</span>
+        </div>
+        <div class="culture-cards-grid" id="culture-collection-grid">
+          <!-- Cards injected dynamically via JS -->
+        </div>
+
+        <!-- Daily Spanish Wisdom / Quote (Marketing-friendly hook) -->
+        <div class="wisdom-banner">
+          <span class="material-symbols-rounded quote-icon">format_quote</span>
+          <p class="wisdom-sp">"El que lee mucho y anda mucho, ve mucho y sabe mucho."</p>
+          <p class="wisdom-ko">"많이 읽고 많이 걷는 사람은 많이 보고 많이 안다." - 미겔 데 세르반테스</p>
+        </div>
+      </section>
+
+      <!-- 2. ALPHABET VIEW -->
+      <section id="alphabet-view" class="view-section">
+        <div class="view-intro">
+          <h2>알파벳 & 발음 마스터</h2>
+          <p>각 글자를 클릭해 발음 팁을 읽고, 오디오 버튼을 눌러 원어민 음성을 들어보세요!</p>
+        </div>
+        
+        <!-- Alphabet Grid -->
+        <div class="alphabet-grid" id="alphabet-grid-container">
+          <!-- Alphabet cards injected dynamically -->
+        </div>
+
+        <!-- Pronunciation Details Sheet (Sliding Modal or Drawer style in desktop/mobile) -->
+        <div class="detail-panel hidden" id="alphabet-detail-panel">
+          <div class="panel-header">
+            <h3 id="panel-letter-title">A, a</h3>
+            <button class="close-btn" id="close-detail-btn">
+              <span class="material-symbols-rounded">close</span>
+            </button>
+          </div>
+          <div class="panel-body">
+            <div class="pronounce-sample">
+              <div class="sample-box">
+                <span class="sample-sp" id="panel-word-sp">Amigo</span>
+                <span class="sample-ko" id="panel-word-ko">친구</span>
+              </div>
+              <button class="audio-play-btn" id="panel-audio-btn" title="원어민 발음 듣기">
+                <span class="material-symbols-rounded">volume_up</span>
+                <span>듣기</span>
+              </button>
+            </div>
+            <div class="tip-section">
+              <span class="tip-label">💡 발음 꿀팁</span>
+              <p id="panel-tip-content">발음 팁 내용이 이곳에 들어갑니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. VOCABULARY VIEW -->
+      <section id="vocab-view" class="view-section">
+        <div class="view-intro">
+          <h2>테마별 필수 단어</h2>
+          <p>카테고리를 선택한 후, 플래시 카드를 터치하여 앞뒷면을 뒤집으며 암기해 보세요!</p>
+        </div>
+
+        <!-- Category Selector -->
+        <div class="category-selector" id="vocab-category-selector">
+          <!-- Tabs injected via JS -->
+        </div>
+
+        <!-- Flashcard Wrapper -->
+        <div class="flashcard-wrapper">
+          <div class="flashcard-container" id="vocab-card-container">
+            <!-- 3D Card flips here -->
+            <div class="flashcard" id="vocab-flashcard">
+              <div class="card-face card-front">
+                <div class="card-header-badge">
+                  <span class="category-tag" id="card-tag">Saludos</span>
+                  <span class="difficulty-tag" id="card-difficulty">초급</span>
+                </div>
+                <div class="card-main-word">
+                  <h3 id="card-word-sp">¡Hola!</h3>
+                  <button class="word-speak-btn" id="card-speak-btn" title="단어 듣기">
+                    <span class="material-symbols-rounded">volume_up</span>
+                  </button>
+                </div>
+                <div class="card-prompt">탭해서 뜻 확인하기</div>
+              </div>
+              <div class="card-face card-back">
+                <div class="card-meaning">
+                  <span class="meaning-label">뜻</span>
+                  <h4 id="card-word-ko">안녕!</h4>
+                </div>
+                <div class="card-example">
+                  <span class="example-label">예문</span>
+                  <p id="card-example-sp">¡Hola! ¿Cómo estás?</p>
+                  <p id="card-example-ko">(안녕! 어떻게 지내?)</p>
+                </div>
+                <div class="card-tip">
+                  <span class="tip-label">팁</span>
+                  <p id="card-tip-text">만났을 때 쓰는 가장 대중적인 인사.</p>
+                </div>
+                <div class="card-prompt">탭해서 단어로 돌아가기</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Card Navigation Controls -->
+          <div class="card-controls">
+            <button class="ctrl-btn" id="prev-card-btn" title="이전 단어">
+              <span class="material-symbols-rounded">arrow_back</span>
+            </button>
+            <span class="card-indicator" id="card-indicator-val">1 / 8</span>
+            <button class="ctrl-btn" id="next-card-btn" title="다음 단어">
+              <span class="material-symbols-rounded">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. CONVERSATION VIEW -->
+      <section id="conv-view" class="view-section">
+        <div class="view-intro">
+          <h2>실전 서바이벌 회화</h2>
+          <p>주제별 스페인 대화 시나리오입니다. 말풍선을 누르면 한국어 해석과 상세 팁이 나타납니다.</p>
+        </div>
+
+        <!-- Conversation Topic Tabs -->
+        <div class="conversation-tabs" id="conv-tabs-container">
+          <!-- Populated via JS -->
+        </div>
+
+        <!-- Dialogue Box -->
+        <div class="dialogue-box" id="dialogue-box-container">
+          <!-- Chat style messages injected here -->
+        </div>
+      </section>
+
+      <!-- 5. QUIZ VIEW -->
+      <section id="quiz-view" class="view-section">
+        <!-- Quiz Home / Intro Screen -->
+        <div id="quiz-intro-screen" class="quiz-screen active">
+          <div class="quiz-banner">
+            <span class="material-symbols-rounded quiz-banner-icon">military_tech</span>
+            <h2>스페인어 도전 골든벨! 🔔</h2>
+            <p>지금까지 배운 알파벳과 회화 실력을 테스트해 보세요. 5문제를 모두 맞추면 레전드 문화 카드를 획득합니다!</p>
+          </div>
+          <button class="primary-action-btn" id="start-quiz-btn">
+            <span class="material-symbols-rounded">play_arrow</span>
+            <span>퀴즈 시작하기</span>
+          </button>
+        </div>
+
+        <!-- Active Quiz Screen -->
+        <div id="quiz-active-screen" class="quiz-screen">
+          <div class="quiz-progress-bar-container">
+            <div class="quiz-progress-fill" id="quiz-progress-fill-val"></div>
+          </div>
+          <div class="quiz-meta">
+            <span class="quiz-q-num" id="quiz-question-indicator">문제 1 / 20</span>
+            <span class="quiz-timer" id="quiz-timer-val">⏰ 15s</span>
+          </div>
+
+          <div class="quiz-card">
+            <h3 class="quiz-question" id="quiz-question-text">질문 텍스트가 표시됩니다.</h3>
+            
+            <div class="quiz-options-list" id="quiz-options-container">
+              <!-- Options buttons injected here -->
+            </div>
+          </div>
+
+          <!-- Explanation Panel (Hidden initially, shown after submit) -->
+          <div class="quiz-explanation-box hidden" id="quiz-explanation-panel">
+            <div class="explanation-status" id="explanation-status-text">정답입니다! 🎉</div>
+            <p id="explanation-body-text">상세 해설이 여기에 들어갑니다.</p>
+            <button class="next-q-btn" id="next-question-btn">
+              <span>다음 문제</span>
+              <span class="material-symbols-rounded">arrow_right_alt</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Result Screen -->
+        <div id="quiz-result-screen" class="quiz-screen">
+          <div class="result-card">
+            <span class="material-symbols-rounded result-emoji" id="result-emoji-val">emoji_events</span>
+            <h2 id="result-title-val">대단해요! 만점입니다!</h2>
+            <p class="result-score-text">점수: <strong id="result-score-val">20 / 20</strong></p>
+            <p class="result-message" id="result-msg-val">당신은 스페인 여행 준비가 완료되었습니다! 보상으로 스페인 문화 카드가 지급되었습니다.</p>
+            
+            <div class="result-buttons">
+              <button class="primary-action-btn" id="retry-quiz-btn">
+                <span class="material-symbols-rounded">replay</span>
+                <span>다시 도전하기</span>
+              </button>
+              <button class="secondary-action-btn" id="go-home-rewards-btn">
+                <span class="material-symbols-rounded">collections</span>
+                <span>보상 보러가기</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="app-navbar">
+      <button class="nav-item active" data-target="home-view">
+        <svg class="nav-icon-svg" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="7" height="9" rx="1.5" fill="currentColor"/>
+          <rect x="14" y="3" width="7" height="5" rx="1.5" fill="currentColor"/>
+          <rect x="3" y="16" width="7" height="5" rx="1.5" fill="currentColor"/>
+          <rect x="14" y="12" width="7" height="9" rx="1.5" fill="currentColor"/>
+        </svg>
+        <span class="nav-label">대시보드</span>
+      </button>
+      <button class="nav-item" data-target="alphabet-view">
+        <svg class="nav-icon-svg" viewBox="0 0 24 24">
+          <path d="M12.5 3h-1L6.3 17h1.7l1.3-3.6h5.4l1.3 3.6h1.7L12.5 3zm-2.6 9L12 6.1l2.1 5.9h-4.2z" fill="currentColor"/>
+          <path d="M2 19h20v1.5H2V19z" fill="currentColor"/>
+        </svg>
+        <span class="nav-label">알파벳</span>
+      </button>
+      <button class="nav-item" data-target="vocab-view">
+        <svg class="nav-icon-svg" viewBox="0 0 24 24">
+          <rect x="4" y="6" width="11" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+          <rect x="9" y="3" width="11" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2" opacity="0.6"/>
+          <line x1="7" y1="10" x2="12" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="7" y1="14" x2="10" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="nav-label">단어장</span>
+      </button>
+      <button class="nav-item" data-target="conv-view">
+        <svg class="nav-icon-svg" viewBox="0 0 24 24">
+          <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="none" stroke="currentColor" stroke-width="2"/>
+          <circle cx="8" cy="9" r="1.5" fill="currentColor"/>
+          <circle cx="12" cy="9" r="1.5" fill="currentColor"/>
+          <circle cx="16" cy="9" r="1.5" fill="currentColor"/>
+        </svg>
+        <span class="nav-label">회화</span>
+      </button>
+      <button class="nav-item" data-target="quiz-view">
+        <svg class="nav-icon-svg" viewBox="0 0 24 24">
+          <!-- Checklist base -->
+          <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1S9.6 1.84 9.18 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <!-- Orange P (Prueba) badge -->
+          <circle cx="15" cy="15" r="5" fill="var(--primary)" />
+          <text x="15" y="18.2" font-size="9" font-family="'Outfit', sans-serif" font-weight="900" fill="#fff" text-anchor="middle">P</text>
+        </svg>
+        <span class="nav-label">퀴즈</span>
+      </button>
+    </nav>
+  </div>
+  
+  <!-- Javascript Logics -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
