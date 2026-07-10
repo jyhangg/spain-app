@@ -55,13 +55,20 @@
 
 body {
   font-family: var(--font-main);
-  background-color: #F1F5F9;
+  background-color: var(--background);
   color: var(--text-dark);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  min-height: 100dvh;
   overflow: hidden;
+}
+
+@media (min-width: 481px) {
+  body {
+    background-color: #F1F5F9;
+  }
 }
 
 /* App Container (Simulating high-end mobile phone mockup on desktop, full screen on mobile) */
@@ -89,9 +96,11 @@ body {
 
 /* Header */
 .app-header {
-  padding: 16px 20px;
+  padding: 12px 20px;
+  padding-top: calc(12px + env(safe-area-inset-top, 0px));
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
@@ -803,13 +812,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  margin-top: 10px;
+  gap: 14px;
+  margin-top: 6px;
 }
 
 .flashcard-container {
   width: 100%;
-  height: 320px;
+  height: 240px;
   perspective: 1000px;
   cursor: pointer;
 }
@@ -836,8 +845,9 @@ body {
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -881,7 +891,7 @@ body {
 }
 
 .card-main-word h3 {
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 800;
   letter-spacing: -0.5px;
 }
@@ -889,8 +899,8 @@ body {
 .word-speak-btn {
   background-color: #fff;
   border: none;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -1158,29 +1168,29 @@ body {
   background-color: #fff;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 24px 20px;
+  padding: 18px 16px;
   box-shadow: var(--shadow-sm);
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 .quiz-question {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 800;
   line-height: 1.5;
   color: var(--text-dark);
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 .quiz-options-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .option-btn {
   background-color: #F8FAFC;
   border: 1px solid var(--border);
-  padding: 14px 18px;
+  padding: 11px 14px;
   border-radius: var(--radius-sm);
   font-family: var(--font-main);
   font-size: 13px;
@@ -1215,7 +1225,7 @@ body {
   background-color: #fff;
   border: 2px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 18px;
+  padding: 14px;
   animation: slide-up-soft 0.3s ease;
   box-shadow: var(--shadow-md);
 }
@@ -1245,10 +1255,10 @@ body {
 }
 
 #explanation-body-text {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-light);
-  line-height: 1.5;
-  margin-bottom: 14px;
+  line-height: 1.4;
+  margin-bottom: 10px;
 }
 
 .next-q-btn {
