@@ -165,7 +165,7 @@ function speakSpanish(text) {
   // OS-specific rate compensation (iOS Safari basic voice is exceptionally fast)
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   if (isIOS) {
-    utterance.rate = 0.78; // Compensate faster native iOS voice to match desktop (approx 0.9)
+    utterance.rate = 0.85; // Safely set rate to 0.85 to prevent audio pixelation/stretching artifacts on iOS Safari
   } else {
     utterance.rate = 0.9;  // Standard Desktop PC/Android
   }
