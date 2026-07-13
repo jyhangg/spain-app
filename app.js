@@ -148,61 +148,17 @@ function triggerConfettiCelebration() {
 // ==========================================================================
 // 4. TTS (Text-to-Speech) System (Hybrid High-Quality Model)
 // ==========================================================================
-// ==========================================================================
-// 4. TTS (Text-to-Speech) System (Hybrid High-Quality Model)
+// 4. TTS (Text-to-Speech) System (Original Stable Model)
 // ==========================================================================
 function speakSpanish(text) {
-  // Record learning action to trigger Streak
-  checkAndTriggerDailyStreak();
-
-  // Detect Mobile/Tablet Devices (iOS or Android) to bypass strict mobile autoplay gesture policies
-  const isMobile = /iPad|iPhone|iPod|Android/i.test(navigator.userAgent) || 
-                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-  if (isMobile) {
-    // On Mobile: Directly trigger native SpeechSynthesis in the sync call stack to guarantee sound output
-    speakLocalSynthesis(text);
-  } else {
-    // On Laptop/PC: Try High-Quality Google Translate TTS API
-    try {
-      const googleTtsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=es-ES&client=tw-ob&q=${encodeURIComponent(text)}`;
-      const audio = new Audio(googleTtsUrl);
-      
-      let fallbackTriggered = false;
-      const fallbackTimeout = setTimeout(() => {
-        if (!fallbackTriggered) {
-          fallbackTriggered = true;
-          speakLocalSynthesis(text);
-        }
-      }, 1500); // 1.5 seconds timeout on desktop
-
-      audio.play()
-        .then(() => {
-          clearTimeout(fallbackTimeout);
-        })
-        .catch((e) => {
-          console.warn("Google TTS failed, falling back to Web Speech API:", e);
-          clearTimeout(fallbackTimeout);
-          if (!fallbackTriggered) {
-            fallbackTriggered = true;
-            speakLocalSynthesis(text);
-          }
-        });
-    } catch (err) {
-      console.warn("Audio object creation failed, using Web Speech API:", err);
-      speakLocalSynthesis(text);
-    }
-  }
-}
-
-// Local Web Speech API SpeechSynthesis Fallback
-function speakLocalSynthesis(text) {
   if (!('speechSynthesis' in window)) {
-    console.warn("SpeechSynthesis is not supported in this browser.");
+    console.warn("TTS is not supported in this browser.");
     return;
   }
   
+  // Cancel current speech to prevent overlapping queues
   window.speechSynthesis.cancel();
+  
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'es-ES';
   
@@ -214,6 +170,7 @@ function speakLocalSynthesis(text) {
     utterance.rate = 0.9;  // Standard Desktop PC/Android
   }
   
+  // Find a native Spanish speaker voice if available
   const voices = window.speechSynthesis.getVoices();
   const spanishVoice = voices.find(voice => voice.lang.startsWith('es-'));
   if (spanishVoice) {
@@ -221,6 +178,9 @@ function speakLocalSynthesis(text) {
   }
   
   window.speechSynthesis.speak(utterance);
+  
+  // Record learning action to trigger Streak
+  checkAndTriggerDailyStreak();
 }
 
 // ==========================================================================
