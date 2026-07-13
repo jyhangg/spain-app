@@ -146,22 +146,56 @@ function triggerConfettiCelebration() {
 }
 
 // ==========================================================================
-// 4. TTS (Text-to-Speech) System
+// 4. TTS (Text-to-Speech) System (Hybrid High-Quality Model)
 // ==========================================================================
 function speakSpanish(text) {
+  // Record learning action to trigger Streak
+  checkAndTriggerDailyStreak();
+
+  // Try High-Quality Google Translate TTS API (Standard clean native speaker voice)
+  try {
+    const googleTtsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=es-ES&client=tw-ob&q=${encodeURIComponent(text)}`;
+    const audio = new Audio(googleTtsUrl);
+    
+    // Set a timeout fallback in case of slow loading or network blocking (e.g. company intranet restrictions)
+    let fallbackTriggered = false;
+    const fallbackTimeout = setTimeout(() => {
+      if (!fallbackTriggered) {
+        fallbackTriggered = true;
+        speakLocalSynthesis(text);
+      }
+    }, 1200); // 1.2 seconds timeout
+
+    audio.play()
+      .then(() => {
+        clearTimeout(fallbackTimeout);
+      })
+      .catch((e) => {
+        console.warn("Google TTS failed, falling back to Web Speech API:", e);
+        clearTimeout(fallbackTimeout);
+        if (!fallbackTriggered) {
+          fallbackTriggered = true;
+          speakLocalSynthesis(text);
+        }
+      });
+  } catch (err) {
+    console.warn("Audio object creation failed, using Web Speech API:", err);
+    speakLocalSynthesis(text);
+  }
+}
+
+// Local Web Speech API SpeechSynthesis Fallback
+function speakLocalSynthesis(text) {
   if (!('speechSynthesis' in window)) {
-    console.warn("TTS is not supported in this browser.");
+    console.warn("SpeechSynthesis is not supported in this browser.");
     return;
   }
   
-  // Cancel current speech to prevent overlapping queues
   window.speechSynthesis.cancel();
-  
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'es-ES';
   utterance.rate = 0.9; // Slightly slower for language learners
   
-  // Find a native Spanish speaker voice if available
   const voices = window.speechSynthesis.getVoices();
   const spanishVoice = voices.find(voice => voice.lang.startsWith('es-'));
   if (spanishVoice) {
@@ -169,9 +203,6 @@ function speakSpanish(text) {
   }
   
   window.speechSynthesis.speak(utterance);
-  
-  // Record learning action to trigger Streak
-  checkAndTriggerDailyStreak();
 }
 
 // ==========================================================================
