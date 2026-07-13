@@ -157,14 +157,15 @@ function speakSpanish(text) {
     const googleTtsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=es-ES&client=tw-ob&q=${encodeURIComponent(text)}`;
     const audio = new Audio(googleTtsUrl);
     
-    // Set a timeout fallback in case of slow loading or network blocking (e.g. company intranet restrictions)
+    // Set a timeout fallback in case of slow loading or network blocking
+    // Mobile/cellular connection might take longer to load the audio, extended to 2.5 seconds
     let fallbackTriggered = false;
     const fallbackTimeout = setTimeout(() => {
       if (!fallbackTriggered) {
         fallbackTriggered = true;
         speakLocalSynthesis(text);
       }
-    }, 1200); // 1.2 seconds timeout
+    }, 2500);
 
     audio.play()
       .then(() => {
@@ -194,7 +195,14 @@ function speakLocalSynthesis(text) {
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'es-ES';
-  utterance.rate = 0.9; // Slightly slower for language learners
+  
+  // OS-specific rate compensation (iOS Safari basic voice is exceptionally fast)
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (isIOS) {
+    utterance.rate = 0.78; // Compensate faster native iOS voice to match desktop (approx 0.9)
+  } else {
+    utterance.rate = 0.9;  // Standard Desktop PC/Android
+  }
   
   const voices = window.speechSynthesis.getVoices();
   const spanishVoice = voices.find(voice => voice.lang.startsWith('es-'));
